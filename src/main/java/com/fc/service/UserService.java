@@ -1,25 +1,5 @@
 package com.fc.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.task.TaskExecutor;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fc.async.MailTask;
@@ -30,14 +10,22 @@ import com.fc.mapper.UserMapper;
 import com.fc.model.Answer;
 import com.fc.model.Message;
 import com.fc.model.User;
-import com.fc.util.HttpUtils;
-import com.fc.util.MyConstant;
-import com.fc.util.MyUtil;
-import com.fc.util.RedisKey;
-import com.fc.util.Response;
-
+import com.fc.util.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -219,6 +207,11 @@ public class UserService {
 		userMapper.updateActivationStateByActivationCode(activationCode);
 	}
 
+	/**
+	 * 从redis缓存当中查找用户的ID
+	 * @param request
+	 * @return
+	 */
 	public Integer getUserIdFromRedis(HttpServletRequest request) {
 		String loginToken = null;
 		Cookie[] cookies = request.getCookies();
@@ -257,6 +250,12 @@ public class UserService {
 		return loginToken;
 	}
 
+    /**
+     * 先进行用户验证，随后再从redis缓存当中读取用户的相关信息并进行返回
+     * @param userId
+     * @param localUserId
+     * @return
+     */
 	public Map<String, Object> profile(Integer userId, Integer localUserId) {
 		Map<String, Object> map = new HashMap<>();
 		User user = userMapper.selectProfileInfoByUserId(userId);

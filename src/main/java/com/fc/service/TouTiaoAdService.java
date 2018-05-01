@@ -1,20 +1,15 @@
 package com.fc.service;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.fc.mapper.TouTiaoAdMapper;
 import com.fc.model.TouTiaoAdClickRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TouTiaoAdService {
 
 	@Autowired
 	public TouTiaoAdMapper touTiaoAdMapper;
-
-	
 
 	public void insertClickRecord(String adid, String cid, String mac, Integer os, String timestamp, String convertId,
 			String callbackUrl, String idfa, String imei, String androidid) {
@@ -43,8 +38,6 @@ public class TouTiaoAdService {
 		record.setIdfa(idfa);
 		record.setImei(imei);
 		record.setAndroidid(androidid);
-
-		
 
 		touTiaoAdMapper.insertClickRecord(record);
 

@@ -1,12 +1,8 @@
 package com.fc.controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fc.model.*;
+import com.fc.service.*;
+import com.fc.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,18 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fc.model.Answer;
-import com.fc.model.Collection;
-import com.fc.model.PageBean;
-import com.fc.model.Question;
-import com.fc.model.Topic;
-import com.fc.model.User;
-import com.fc.service.AnswerService;
-import com.fc.service.CollectionService;
-import com.fc.service.QuestionService;
-import com.fc.service.TopicService;
-import com.fc.service.UserService;
-import com.fc.util.Response;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
@@ -88,6 +77,14 @@ public class UserController {
 		return "redirect:/toLogin";
 	}
 
+	/**
+	 * 我回答的问题
+	 * @param userId
+	 * @param page
+	 * @param request
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping("/profile/{userId}")
 	public String profile(@PathVariable Integer userId, Integer page, HttpServletRequest request, Model model) {
 		Integer localUserId = userService.getUserIdFromRedis(request);
